@@ -3,6 +3,7 @@ using Trains.Application;
 using Trains.Domain;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
+using Trains.Infrastructure;
 using Xunit;
 
 namespace Trains.UnitTests.Application
@@ -12,9 +13,11 @@ namespace Trains.UnitTests.Application
         IInputService InputService;
         Input Input;
         Graph RailRoad;
+        ILogger Logger;
         public LengthOfTheShortestRouteServiceTest()
         {
-            InputService = new InputService();
+            Logger = new LoggerStandardOut();
+            InputService = new InputService(Logger);
             Input = InputService.handle("AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7");
             RailRoad = Graph.createGraph(Input);
         }
@@ -22,7 +25,7 @@ namespace Trains.UnitTests.Application
         public void givenValidParametersGetLengthOfTheShortestRoute()
         {
             IShortestPathSearch shortestPath = new LengthOfTheShortestRoute();
-            ILengthOfTheShortestRouteService shortestPathService = new LengthOfTheShortestRouteService(RailRoad);
+            ILengthOfTheShortestRouteService shortestPathService = new LengthOfTheShortestRouteService(RailRoad,Logger);
             var outPut8 = shortestPathService.get(shortestPath, "A", "C");
             var outPut9 = shortestPathService.get(shortestPath, "B", "B");
             Assert.Equal(9, outPut8);
@@ -34,7 +37,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IShortestPathSearch shortestPath = new LengthOfTheShortestRoute();
-            ILengthOfTheShortestRouteService shortestPathService = new LengthOfTheShortestRouteService(RailRoad);
+            ILengthOfTheShortestRouteService shortestPathService = new LengthOfTheShortestRouteService(RailRoad,Logger);
 
             // Assert
             Assert.Throws<FormatException>(() => shortestPathService.get(shortestPath, "ABC","CDE"));

@@ -2,6 +2,7 @@ using Trains.Application;
 using Trains.Domain;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
+using Trains.Infrastructure;
 using Xunit;
 
 namespace Trains.UnitTests.Domain.Algorithms
@@ -11,9 +12,11 @@ namespace Trains.UnitTests.Domain.Algorithms
         IInputService InputService;
         Input Input;
         Graph RailRoad;
+        ILogger Logger;
         public LengthOfTheShortestRouteTest()
         {
-            InputService = new InputService();
+            Logger = new LoggerStandardOut();
+            InputService = new InputService(Logger);
             Input = InputService.handle("AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7");
             RailRoad = Graph.createGraph(Input);
         }

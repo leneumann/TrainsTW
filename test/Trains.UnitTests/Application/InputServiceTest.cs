@@ -2,17 +2,23 @@ using System;
 using System.Linq;
 using Trains.Application;
 using Trains.Domain;
+using Trains.Infrastructure;
 using Xunit;
 
 namespace Trains.UnitTests.Application
 {
     public class InputServiceTest
     {
+        public ILogger Logger;
+        public InputServiceTest()
+        {
+            Logger = new LoggerStandardOut();
+        }
         [Fact]
         public void givenAValidInputShouldReturnAValidInputObject()
         {
             // Arrange
-            IInputService inputService = new InputService();
+            IInputService inputService = new InputService(Logger);
 
             // Act
             var input = inputService.handle("AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7");
@@ -28,7 +34,7 @@ namespace Trains.UnitTests.Application
         public void givenANullInputShouldRaiseArgumentNullException()
         {
             // Arrange
-            IInputService inputService = new InputService();
+            IInputService inputService = new InputService(Logger);
             string @null = null;
 
             //Assert
@@ -41,7 +47,7 @@ namespace Trains.UnitTests.Application
         public void givenAnInvalidInputShouldRaiseFormatException(string input)
         {
             // Arrange
-            IInputService inputService = new InputService();
+            IInputService inputService = new InputService(Logger);
 
             //Assert
             Assert.Throws<FormatException>(() => inputService.handle(input));

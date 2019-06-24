@@ -3,6 +3,7 @@ using Trains.Application;
 using Trains.Domain;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
+using Trains.Infrastructure;
 using Xunit;
 
 namespace Trains.UnitTests.Application
@@ -12,9 +13,11 @@ namespace Trains.UnitTests.Application
         IInputService InputService;
         Input Input;
         Graph RailRoad;
+        ILogger Logger;
         public DistanceOfTheRouteServiceTest()
         {
-            InputService = new InputService();
+            Logger = new LoggerStandardOut();
+            InputService = new InputService(Logger);
             Input = InputService.handle("AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7");
             RailRoad = Graph.createGraph(Input);
         }
@@ -23,7 +26,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IStepsSearch stepsSearch = new DistanceOfTheRoute();
-            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(RailRoad);
+            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(RailRoad,Logger);
 
             // Act
             var outPut = distance.get(stepsSearch, "A", "B", "C");
@@ -36,7 +39,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IStepsSearch stepsSearch = new DistanceOfTheRoute();
-            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(RailRoad);
+            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(RailRoad,Logger);
 
             // Assert
             Assert.Throws<FormatException>(() => distance.get(stepsSearch, "ABC"));
@@ -46,7 +49,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IStepsSearch stepsSearch = new DistanceOfTheRoute();
-            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(RailRoad);
+            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(RailRoad,Logger);
             
             // Act
             var outPut = distance.get(stepsSearch, "F");

@@ -3,6 +3,7 @@ using Trains.Application;
 using Trains.Domain;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
+using Trains.Infrastructure;
 using Xunit;
 
 namespace Trains.UnitTests.Application
@@ -12,9 +13,11 @@ namespace Trains.UnitTests.Application
         IInputService InputService;
         Input Input;
         Graph RailRoad;
+        ILogger Logger;
         public NumberOfRoutesServiceTest()
         {
-            InputService = new InputService();
+            Logger = new LoggerStandardOut();
+            InputService = new InputService(Logger);
             Input = InputService.handle("AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7");
             RailRoad = Graph.createGraph(Input);
         }
@@ -23,7 +26,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IBreadthFirstSearch maxOfStops = new NumberOfRoutesAtMaximumOfStops();
-            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad);
+            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad, Logger);
 
             // Act
             var outPut6 = bfsService.get(maxOfStops, "C", "C", 3);
@@ -36,7 +39,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IBreadthFirstSearch exactlyStops = new NumberOfRoutesWithExactlyStops();
-            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad);
+            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad, Logger);
 
             // Act
             var outPut7 = bfsService.get(exactlyStops, "A", "C", 4);
@@ -49,7 +52,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IBreadthFirstSearch routesByDistance = new NumberOfRoutesByDistance();
-            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad);
+            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad, Logger);
 
             // Act
             var outPut10 = bfsService.get(routesByDistance, "C", "C", 30);
@@ -62,7 +65,7 @@ namespace Trains.UnitTests.Application
         {
             // Arrange
             IBreadthFirstSearch maxOfStops = new NumberOfRoutesAtMaximumOfStops();
-            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad);
+            INumberOfRoutesService bfsService = new NumberOfRoutesService(RailRoad, Logger);
 
             // Assert
             Assert.Throws<FormatException>(() => bfsService.get(maxOfStops, "ABC", "CDE", 3));

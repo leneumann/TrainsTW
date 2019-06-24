@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Trains.Domain;
+using Trains.Infrastructure;
 
 namespace Trains.Application
 {
@@ -13,6 +14,13 @@ namespace Trains.Application
     public class InputService : IInputService
     {
         public const string FORMATEXCEPTIONMESSAGE = "Invalid Format";
+
+        public ILogger Logger { get; }
+
+        public InputService(ILogger logger)
+        {
+            Logger = logger;
+        }
         public Input handle(string input)
         {
             string cleanInput;
@@ -27,15 +35,18 @@ namespace Trains.Application
             }
             catch (FormatException formatException)
             {
+                Logger.error(formatException.Message);
                 throw formatException;
             }
             catch (ArgumentNullException nullException)
             {
+                Logger.error(nullException.Message);
                 throw nullException;
             }
-            catch (Exception defaultException)
+            catch (Exception exception)
             {
-                throw defaultException;
+                Logger.fatal(exception.Message);
+                throw exception;
             }
             return new Input(splitedInput, nodes);
         }

@@ -1,6 +1,7 @@
 using System;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
+using Trains.Infrastructure;
 
 namespace Trains.Application
 {
@@ -12,10 +13,13 @@ namespace Trains.Application
     {
         private const string NOTFOUND = "ROUTE NOT FOUND";
         private Graph RailRoad;
-        public DistanceOfTheRouteService(Graph graph)
+        public DistanceOfTheRouteService(Graph graph, ILogger logger)
         {
             this.RailRoad = graph;
+            Logger = logger;
         }
+
+        public ILogger Logger { get; }
 
         public string get(IStepsSearch searchMecanism, params string[] steps)
         {
@@ -33,10 +37,12 @@ namespace Trains.Application
             }
             catch (FormatException formatException)
             {
+                Logger.error(formatException.Message);
                 throw formatException;
             }
             catch (Exception exception)
             {
+                Logger.fatal(exception.Message);
                 throw exception;
             }
 

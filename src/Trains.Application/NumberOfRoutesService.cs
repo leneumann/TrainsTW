@@ -1,6 +1,7 @@
 using System;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
+using Trains.Infrastructure;
 
 namespace Trains.Application
 {
@@ -11,9 +12,12 @@ namespace Trains.Application
     public class NumberOfRoutesService : INumberOfRoutesService
     {
         public Graph RailRoad { get; }
-        public NumberOfRoutesService(Graph railRoad)
+        public ILogger Logger { get; }
+
+        public NumberOfRoutesService(Graph railRoad, ILogger logger)
         {
             RailRoad = railRoad;
+            Logger = logger;
         }
 
         public int get(IBreadthFirstSearch searchMechanism, string start, string destination, int valueLimit)
@@ -27,10 +31,12 @@ namespace Trains.Application
             }
             catch (FormatException formatException)
             {
+                Logger.error(formatException.Message);
                 throw formatException;
             }
             catch (Exception exception)
             {
+                Logger.fatal(exception.Message);
                 throw exception;
             }
             return searchMechanism.find(nodeStart, nodeDestination, valueLimit);
