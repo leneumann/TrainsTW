@@ -18,7 +18,7 @@ namespace Trains.Domain.Algorithms
                 var nextNode = NextNodeToVisit();
 
                 if (notFoundNextNode(visitingNode, nextNode))
-                    return ($"PATH NOT FOUND");
+                    return ($"NO SUCH ROUTE");
 
                 foreach (var adjacent in visitingNode.getAdjacents())
                 {

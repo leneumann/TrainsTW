@@ -2,13 +2,8 @@ using Xunit;
 
 namespace Trains.UnitTests.Application
 {
-    public class RailRoadServiceTest
+    public class NumberOfRoutesServiceTest
     {
-        [Fact]
-        public void givenValidStepsShouldReturnDistanceOfTheRoute()
-        {
-            Assert.False(true);
-        }
         [Fact]
         public void givenValidParametersGetNumberOfRoutesAtMaximumOfStops()
         {
@@ -16,11 +11,6 @@ namespace Trains.UnitTests.Application
         }
         [Fact]
         public void givenValidParametersGetNumberOfRoutesWithExactlyStops()
-        {
-            Assert.False(true);
-        }
-        [Fact]
-        public void givenValidParametersGetLengthOfTheShortestRoute()
         {
             Assert.False(true);
         }
