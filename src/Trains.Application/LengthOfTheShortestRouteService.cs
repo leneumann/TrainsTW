@@ -3,7 +3,11 @@ using Trains.Domain.RailRoad;
 
 namespace Trains.Application
 {
-    public class LengthOfTheShortestRouteService
+    public interface ILengthOfTheShortestRouteService
+    {
+        int get(IShortestPathSearch shortestPath, string start, string destination);
+    }
+    public class LengthOfTheShortestRouteService : ILengthOfTheShortestRouteService
     {
         private Graph RailRoad { get; }
         public LengthOfTheShortestRouteService(Graph railRoad)

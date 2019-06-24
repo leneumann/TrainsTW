@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Trains.Domain\Trains.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Trains.Application\Trains.Application.csproj" />
   </ItemGroup>
 
 </Project>

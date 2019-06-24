@@ -3,7 +3,11 @@ using Trains.Domain.RailRoad;
 
 namespace Trains.Application
 {
-    public class NumberOfRoutesService
+    public interface INumberOfRoutesService
+    {
+        int get(IBreadthFirstSearch searchMechanism, string start, string destination, int valueLimit);
+    }
+    public class NumberOfRoutesService : INumberOfRoutesService
     {
         public Graph RailRoad { get; }
         public NumberOfRoutesService(Graph railRoad)

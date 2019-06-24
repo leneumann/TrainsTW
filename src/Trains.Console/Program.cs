@@ -15,23 +15,23 @@ namespace Trains.Console
 
 
             IStepsSearch stepsSearch = new DistanceOfTheRoute();
-            var distance = new DistanceOfTheRouteService(graph);
-            var outPut1 = distance.get(stepsSearch, "A-B-C");
-            var outPut2 = distance.get(stepsSearch, "A-D");
-            var outPut3 = distance.get(stepsSearch, "A-D-C");
-            var outPut4 = distance.get(stepsSearch, "A-E-B-C-D");
-            var outPut5 = distance.get(stepsSearch, "A-E-D");
+            IDistanceOfTheRouteService distance = new DistanceOfTheRouteService(graph);
+            var outPut1 = distance.get(stepsSearch, "A","B","C");
+            var outPut2 = distance.get(stepsSearch, "A","D");
+            var outPut3 = distance.get(stepsSearch, "A","D","C");
+            var outPut4 = distance.get(stepsSearch, "A","E","B","C","D");
+            var outPut5 = distance.get(stepsSearch, "A","E","D");
 
             IBreadthFirstSearch maxOfStops = new NumberOfRoutesAtMaximumOfStops();
             IBreadthFirstSearch exactlyStops = new NumberOfRoutesWithExactlyStops();
             IBreadthFirstSearch routesByDistance = new NumberOfRoutesByDistance();
-            var bfsService = new NumberOfRoutesService(graph);
+            INumberOfRoutesService bfsService = new NumberOfRoutesService(graph);
             var outPut6 = bfsService.get(maxOfStops, "C", "C", 3);
             var outPut7 = bfsService.get(exactlyStops, "A", "C", 4);
             var outPut10 = bfsService.get(routesByDistance, "C", "C", 30);
 
             IShortestPathSearch shortestPath = new LengthOfTheShortestRoute();
-            var shortestPathService = new LengthOfTheShortestRouteService(graph);
+            ILengthOfTheShortestRouteService shortestPathService = new LengthOfTheShortestRouteService(graph);
             var outPut8 = shortestPathService.get(shortestPath, "A", "C");
             var outPut9 = shortestPathService.get(shortestPath, "B", "B");
 
