@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,18 +12,36 @@ namespace Trains.Application
     }
     public class InputService : IInputService
     {
+        public const string FORMATEXCEPTIONMESSAGE = "Invalid Format";
         public Input handle(string input)
         {
-            string cleanInput = removeEmptySpaces(input);
-            string[] inputNodes = splitNodes(cleanInput);
-            IOrderedEnumerable<char> nodes = getNodesFromInput(inputNodes);
-            return new Input(inputNodes, nodes);
+            string cleanInput;
+            string[] splitedInput;
+            IOrderedEnumerable<char> nodes;
+            try
+            {
+                cleanInput = removeEmptySpaces(input);
+                splitedInput = splitInput(cleanInput);
+                validateSplitedInput(splitedInput);
+                nodes = getNodesFromInput(splitedInput);
+            }
+            catch (FormatException formatException)
+            {
+                throw formatException;
+            }
+            catch (ArgumentNullException nullException)
+            {
+                throw nullException;
+            }
+            catch (Exception defaultException)
+            {
+                throw defaultException;
+            }
+            return new Input(splitedInput, nodes);
         }
 
-        private string[] splitNodes(string cleanInput)
-        {
-            return cleanInput.Split(",");
-        }
+        private string[] splitInput(string cleanInput) => cleanInput.Split(",");
+
 
         private IOrderedEnumerable<char> getNodesFromInput(string[] inputNodes)
         {
@@ -38,9 +57,23 @@ namespace Trains.Application
             return nodesList.Distinct().OrderBy(x => x);
         }
 
-        private string removeEmptySpaces(string input)
+        private string removeEmptySpaces(string input) => Regex.Replace(input, @"\s+", "");
+        public void validateSplitedInput(string[] splitedInput)
         {
-            return Regex.Replace(input, @"\s+", "");
+            if (!inputIsValid(splitedInput))
+                throw new FormatException(FORMATEXCEPTIONMESSAGE);
+        }
+        private bool inputIsValid(string[] splitedInput)
+        {
+            var pattern = "^[a-zA-Z0-9 ]*$";
+            for (int i = 0; i < splitedInput.Length; i++)
+            {
+                if (!Regex.IsMatch(splitedInput[i], pattern))
+                    return false;
+                if (splitedInput[i].Count() > 3)
+                    return false;
+            }
+            return true;
         }
     }
 }

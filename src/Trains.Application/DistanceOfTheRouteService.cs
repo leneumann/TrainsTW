@@ -35,6 +35,10 @@ namespace Trains.Application
             {
                 throw formatException;
             }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
 
             return searchMecanism.find(nodes);
         }

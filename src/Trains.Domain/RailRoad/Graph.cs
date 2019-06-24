@@ -9,7 +9,7 @@ namespace Trains.Domain.RailRoad
         public Graph(Input input)
         {
             addNodes(input);
-            var inputNodes = input.getInputNodes();
+            var inputNodes = input.getSplitedInput();
             addEdges(inputNodes);
         }
 

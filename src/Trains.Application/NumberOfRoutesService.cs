@@ -1,3 +1,4 @@
+using System;
 using Trains.Domain.Algorithms;
 using Trains.Domain.RailRoad;
 
@@ -17,8 +18,21 @@ namespace Trains.Application
 
         public int get(IBreadthFirstSearch searchMechanism, string start, string destination, int valueLimit)
         {
-            var nodeStart = RailRoad.getNode(char.Parse(start));
-            var nodeDestination = RailRoad.getNode(char.Parse(destination));
+            Node nodeStart;
+            Node nodeDestination;
+            try
+            {
+                nodeStart = RailRoad.getNode(char.Parse(start));
+                nodeDestination = RailRoad.getNode(char.Parse(destination));
+            }
+            catch (FormatException formatException)
+            {
+                throw formatException;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
             return searchMechanism.find(nodeStart, nodeDestination, valueLimit);
         }
     }
