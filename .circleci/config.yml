@@ -22,10 +22,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
-      - run: dotnet test "--logger:junit;LogFilePath=./test-reports/results.xml" /p:Include="[${PROJECT_NAME}*]*" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Thereshold=${MINIMUM_COVERAGE} /p:CoverletOutput="../coverage.xml"
+      - run: dotnet test "--logger:junit;LogFilePath=./test-reports/results.xml" /p:Include="[${PROJECT_NAME}*]*" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Thereshold=${MINIMUM_COVERAGE} /p:CoverletOutput="~/project/coverage.xml"
       - run: curl -s https://codecov.io/bash > codecov
       - run: chmod +x codecov
-      - run: ./codecov -f "coverage.xml" -t ${CODECOV_TOKEN}
+      - run: ./codecov -f "~/project/coverage.xml" -t ${CODECOV_TOKEN}
 
 workflows:
   version: 2
