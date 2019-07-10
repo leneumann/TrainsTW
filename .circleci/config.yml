@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run: dotnet restore
-      - run: dotnet build ${PROJECT_NAME}.sln
+      - run: dotnet build ${SOLUTION_NAME}.sln
       - persist_to_workspace:
           root: ~/project
           paths:
