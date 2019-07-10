@@ -1,0 +1,37 @@
+version: 2.1
+
+executors:
+  my-executor:
+    docker:
+      - image: microsoft/dotnet:sdk
+    working_directory: ~/project
+    
+jobs:
+  build:
+    executor: my-executor
+    steps:
+      - checkout
+      - run: dotnet restore
+      - run: dotnet build ${PROJECT_NAME}.sln
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  test:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run: dotnet test "--logger:junit;LogFilePath=./test-reports/results.xml" /p:Include="[${PROJECT_NAME}*]*" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Thereshold=${MINIMUM_COVERAGE} /p:CoverletOutput="../coverage.xml"
+      - run: curl -s https://codecov.io/bash > codecov
+      - run: chmod +x codecov
+      - run: ./codecov -f "coverage.xml" -t ${CODECOV_TOKEN}
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
